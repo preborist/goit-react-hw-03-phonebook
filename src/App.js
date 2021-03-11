@@ -59,8 +59,9 @@ class App extends Component {
     console.log('componentDidMount');
     const contacts = localStorage.getItem('contacts');
     const parsedContacts = JSON.parse(contacts);
-
-    this.setState({ contacts: parsedContacts });
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -72,6 +73,7 @@ class App extends Component {
   }
   render() {
     const { contacts, name, number, filter } = this.state;
+
     const normalizedFilter = filter.toLowerCase();
     const filteredContacts = contacts.filter(contact =>
       contact.name.toLowerCase().includes(normalizedFilter),
@@ -87,7 +89,7 @@ class App extends Component {
           inputNumber={number}
         />
         <h2>Contacts</h2>
-        {contacts.length !== 0 && (
+        {contacts.length > 0 && (
           <ContactsList
             contacts={filteredContacts}
             onHandleDelete={this.handleDelete}
